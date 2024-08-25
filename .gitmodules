@@ -1,0 +1,10 @@
+[submodule "netvolart/themes/themes/hugo-theme-cleanwhite"]
+	path = netvolart/themes/themes/hugo-theme-cleanwhite
+	url = https://github.com/zhaohuabing/hugo-theme-cleanwhite.git
+[submodule "netvolart/themes/hugo-theme-cleanwhite"]
+	path = netvolart/themes/hugo-theme-cleanwhite
+	url = https://github.com/zhaohuabing/hugo-theme-cleanwhite.git
+[submodule "netvolart/public"]
+	path = netvolart/public
+	url = https://github.com/netvolart/netvolart.github.io.git
+	branch = main
