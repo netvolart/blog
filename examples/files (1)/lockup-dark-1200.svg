@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" width="1200" height="400">
+  <title>Artem Volkov — full lockup with tagline</title>
+  <desc>Full version with tagline for banners and previews</desc>
+
+  <g transform="translate(80, 200)">
+    <text x="0" y="38" font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+          font-size="180" font-weight="700" fill="#F97316" letter-spacing="-8">A</text>
+    <text x="128" y="38" font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+          font-size="180" font-weight="700" fill="#2DD4BF" letter-spacing="-8">V</text>
+
+    <line x1="300" y1="-80" x2="300" y2="80"
+          stroke="#E8E6E1" stroke-width="2" stroke-opacity="0.35"/>
+
+    <!-- Name -->
+    <text x="345" y="-5" font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+          font-size="84" font-weight="500" fill="#E8E6E1" letter-spacing="-2">Artem Volkov</text>
+
+    <!-- Tagline -->
+    <text x="345" y="60" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace"
+          font-size="32" fill="#E8E6E1" opacity="0.6">Platform Engineering &amp; AI</text>
+  </g>
+</svg>

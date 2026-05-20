@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 220" width="1100" height="220">
+  <title>Artem Volkov — email banner</title>
+  <desc>Transparent banner for email header (1100x220, Substack recommended)</desc>
+
+  <g transform="translate(60, 110)">
+    <text x="0" y="22" font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+          font-size="100" font-weight="700" fill="#F97316" letter-spacing="-5">A</text>
+    <text x="68" y="22" font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+          font-size="100" font-weight="700" fill="#2DD4BF" letter-spacing="-5">V</text>
+
+    <line x1="160" y1="-45" x2="160" y2="45"
+          stroke="#1A1F26" stroke-width="1.5" stroke-opacity="0.35"/>
+
+    <text x="185" y="-2" font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+          font-size="46" font-weight="500" fill="#1A1F26" letter-spacing="-1">Artem Volkov</text>
+
+    <text x="185" y="33" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace"
+          font-size="18" fill="#1A1F26" opacity="0.6">Platform Engineering &amp; AI</text>
+  </g>
+</svg>

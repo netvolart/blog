@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <title>Platform Engineering blog logo (light)</title>
+  <desc>Light variant: stacked platform layers with orange and teal accents</desc>
+
+  <rect x="0" y="0" width="1024" height="1024" rx="180" fill="#F5F2EC"/>
+
+  <g transform="translate(512,512)" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="-280" y="-260" width="560" height="96" rx="18"
+          fill="#F97316" stroke="#F97316" stroke-width="22"/>
+    <rect x="-280" y="-130" width="560" height="96" rx="18"
+          fill="none" stroke="#1A1F26" stroke-width="22"/>
+    <rect x="-280" y="0" width="560" height="96" rx="18"
+          fill="none" stroke="#1A1F26" stroke-width="22"/>
+    <rect x="-280" y="130" width="560" height="96" rx="18"
+          fill="#2DD4BF" stroke="#2DD4BF" stroke-width="22"/>
+    <line x1="150" y1="-300" x2="150" y2="265"
+          stroke="#1A1F26" stroke-width="18" stroke-linecap="round"/>
+    <circle cx="150" cy="-300" r="26" fill="#1A1F26"/>
+    <circle cx="150" cy="265" r="26" fill="#1A1F26"/>
+  </g>
+</svg>

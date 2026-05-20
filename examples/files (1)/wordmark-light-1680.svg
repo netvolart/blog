@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1680 320" width="1680" height="320">
+  <title>Artem Volkov — wordmark (light)</title>
+  <desc>Light variant for light header backgrounds</desc>
+
+  <g transform="translate(80, 160)">
+    <text x="0" y="38" font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+          font-size="180" font-weight="700" fill="#F97316" letter-spacing="-8">A</text>
+    <text x="128" y="38" font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+          font-size="180" font-weight="700" fill="#2DD4BF" letter-spacing="-8">V</text>
+
+    <line x1="300" y1="-70" x2="300" y2="70"
+          stroke="#1A1F26" stroke-width="2" stroke-opacity="0.35"/>
+
+    <text x="345" y="22" font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+          font-size="90" font-weight="500" fill="#1A1F26" letter-spacing="-2">Artem Volkov</text>
+  </g>
+</svg>
