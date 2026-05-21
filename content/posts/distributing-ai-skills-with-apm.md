@@ -23,7 +23,17 @@ This post is the short version of what worked.
 
 Modern coding agents are often set up with a plan / execute split. One pass to think through what needs to happen, another to actually do it. Sometimes more roles are bolted on — a reviewer, an architect, a tester — but the load-bearing one is the executor.
 
-When the spec lands on the executor, it knows WHAT to build. The problem is that it does not know HOW your team builds it. Naming conventions, where to place which resource, which shared component to integrate with, which MCP server to call for the policy document. That is the gap skills cover.
+When the spec lands on the executor, it knows WHAT to build. The problem is that it does not know HOW your team builds it. Naming conventions, where to place which resource, which shared component to integrate with, which MCP server to call for the policy document.
+
+That is the gap skills cover.
+
+Every team builds its own skills. That is "project knowledge". Individual engineers build their own skills too. That is "personal knowledge".
+
+From the Platform Team perspective, we can produce and distribute a third layer:
+
+- **Company knowledge skills.** How we do things in our org. How we work with our specific technologies and internal implementations.
+- **Role expertise skills.** If someone on the Platform Team is an expert in infrastructure, they package that expertise as a skill. Product teams then do infra work without pulling the expert into the loop.
+
 
 A skill is just a folder:
 
@@ -59,7 +69,12 @@ This is the exact problem `npm`, `pip`, and `cargo` solved for code dependencies
 
 [APM (Agent Package Manager)](https://github.com/microsoft/apm) is an open-source tool from Microsoft. It treats AI agent configuration the way npm treats JavaScript dependencies. You declare what you want in an `apm.yml`, run `apm install`, and APM resolves the tree, pins exact commits in a lockfile, and deploys files to the directories your AI tools actually read from — `.claude/`, `.github/`, `.cursor/`, `.opencode/`.
 
-It understands several package shapes out of the box: full APM packages, Claude Skills, GitHub Copilot plugins, MCP servers, individual files from a monorepo. For a platform team, the two that matter most are **APM packages** (bundles of skills + instructions + agents + prompts) and **Claude Skills** (just a `SKILL.md` and its supporting files).
+APM normalizes everything to two delivery shapes:
+
+- **A full package** — a git repo with an `apm.yml` manifest and a `.apm/` tree bundling all the standard primitives every supported tool understands: skills, agents, prompts, instructions, hooks. One versioned unit, one lockfile entry.
+- **A single primitive** — most often an individual skill, imported straight from a subdirectory of a repo. No `apm.yml` required at that level. APM calls these "single-primitive imports".
+
+For a platform team, packages are the "team kit" pattern — a coherent bundle of conventions you ship together. Single-primitive imports are for one-offs that do not belong to any specific kit.
 
 ### What an APM package looks like
 
@@ -121,9 +136,9 @@ The pattern that worked for us: **user-level, global skills**. One manifest per 
 
 Three pieces:
 
-**1. A package in GitLab that holds the team's "standard" skills** — for us this is the backend template skills produced by our Backstage template. A proper APM package with its own `apm.yml` and `.apm/skills/`.
+**1. A package in GitLab that holds the team's "standard" kit** — for us this is the backend template package produced by our Backstage template. A proper APM package with its own `apm.yml` and a `.apm/` tree carrying skills, agents, prompts, instructions, and hooks together as one versioned bundle.
 
-**2. A monorepo of individual skills** — one-off skills that do not belong to any single template (company-specific integrations, knowledge skills, utilities). APM can pull individual subdirectories out of a monorepo, so each skill is independently installable.
+**2. A monorepo of individual skills** — one-off skills that do not belong to any single template (company-specific integrations, knowledge skills, utilities). APM pulls each one as a single-primitive import directly from its subdirectory, so they ship independently of any package.
 
 **3. A user-level manifest at `~/.apm/apm.yml`** on each developer's machine that pulls both:
 
