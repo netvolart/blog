@@ -73,7 +73,7 @@ I write about building and running modern infrastructure — Kubernetes, AWS, Te
     safari_pinned_tab = "/favicon.svg"
 
   [params.label]
-    text = "Artem Volkov"
+    text = "Platform Engineering | DevEx | AI"
     icon = "/images/avatar.svg"
     iconHeight = 32
 
