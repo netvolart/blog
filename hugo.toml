@@ -1,73 +1,119 @@
 baseURL                = "https://artemvolkov.com/"
-locale                 = "en"
+locale                 = "en-us"
 defaultContentLanguage = "en"
 title                  = "Artem Volkov"
 
 enableRobotsTXT = true
 enableEmoji     = true
+buildDrafts     = false
+buildFuture     = false
+buildExpired    = false
 
 [pagination]
   pagerSize = 10
 
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
 [markup.highlight]
-  style     = "github-dark"
   noClasses = false
-
-[params]
-  author      = "Artem Volkov"
-  description = "Personal blog of Artem Volkov — Platform Engineering, Cloud, AI"
-  keywords    = "blog, platform engineering, cloud, ai, devops, sre, terraform, aws"
-  info        = ["Platform Engineering | Cloud | AI"]
-  colorScheme = "dark"
-  avatarURL  = "/images/avatar.svg"
-  faviconSVG = "/favicon.svg"
-  favicon_32 = "/favicon-32.png"
-  favicon_16 = "/favicon-32.png"
-  touchicon  = "/favicon-256.png"
-  mask_icon  = "/favicon.svg"
-  manifest   = "/site.webmanifest"
-  dateFormat  = "January 2, 2006"
-  since       = 2026
-  hideFooter    = false
-  hideCredits   = false
-  hideCopyright = false
-  customCSS  = []
-  customSCSS = []
-  customJS   = []
-
-  [params.opengraph]
-    image = "images/og-cover.png"
-
-[[params.social]]
-  name   = "Github"
-  icon   = "fa-brands fa-github fa-2x"
-  weight = 1
-  url    = "https://github.com/netvolart/"
-
-[[params.social]]
-  name   = "LinkedIn"
-  icon   = "fa-brands fa-linkedin fa-2x"
-  weight = 2
-  url    = "https://www.linkedin.com/in/artem-volkov/"
-
-[[params.social]]
-  name   = "RSS"
-  icon   = "fa-solid fa-rss fa-2x"
-  weight = 3
-  rel    = "alternate"
-  type   = "application/rss+xml"
-  url    = "index.xml"
-
-[menu]
-  [[menu.main]]
-    name   = "Posts"
-    weight = 1
-    url    = "posts/"
-  [[menu.main]]
-    name   = "About"
-    weight = 2
-    url    = "about/"
+  codeFences = true
+  guessSyntax = true
+  style = "github-dark"
 
 [module]
   [[module.imports]]
-    path = "github.com/luizdepra/hugo-coder"
+    path = "github.com/adityatelange/hugo-PaperMod"
+
+[params]
+  env         = "production"
+  title       = "Artem Volkov"
+  author      = "Artem Volkov"
+  description = "Personal blog of Artem Volkov — Platform Engineering, Cloud, AI"
+  keywords    = ["blog", "platform engineering", "cloud", "ai", "devops", "sre"]
+
+  defaultTheme       = "dark"
+  disableThemeToggle = false
+
+  ShowReadingTime               = true
+  ShowShareButtons              = false
+  ShowPostNavLinks              = true
+  ShowBreadCrumbs               = true
+  ShowCodeCopyButtons           = true
+  ShowWordCount                 = true
+  ShowRssButtonInSectionTermList = true
+  UseHugoToc                    = true
+  disableSpecial1stPost         = false
+  disableScrollToTop            = false
+  comments                      = false
+
+  [params.homeInfoParams]
+    Title   = "Hi, I'm Artem 👋"
+    Content = """
+Platform Engineering • Cloud • AI
+
+I write about building and running modern infrastructure — Kubernetes, AWS, Terraform, automation, and the AI tooling reshaping the way we ship software.
+"""
+
+  [[params.socialIcons]]
+    name = "github"
+    url  = "https://github.com/netvolart/"
+  [[params.socialIcons]]
+    name = "linkedin"
+    url  = "https://www.linkedin.com/in/artem-volkov/"
+  [[params.socialIcons]]
+    name = "rss"
+    url  = "/index.xml"
+
+  [params.assets]
+    favicon          = "/favicon.svg"
+    favicon16x16     = "/favicon-32.png"
+    favicon32x32     = "/favicon-32.png"
+    apple_touch_icon = "/favicon-256.png"
+    safari_pinned_tab = "/favicon.svg"
+
+  [params.label]
+    text = "Artem Volkov"
+    icon = "/images/avatar.svg"
+    iconHeight = 32
+
+  [params.cover]
+    hidden       = false
+    hiddenInList = false
+    hiddenInSingle = false
+
+  [params.fuseOpts]
+    isCaseSensitive = false
+    shouldSort      = true
+    location        = 0
+    distance        = 1000
+    threshold       = 0.4
+    minMatchCharLength = 0
+    keys = ["title", "permalink", "summary", "content"]
+
+[menu]
+  [[menu.main]]
+    identifier = "posts"
+    name       = "Posts"
+    url        = "/posts/"
+    weight     = 10
+  [[menu.main]]
+    identifier = "categories"
+    name       = "Categories"
+    url        = "/categories/"
+    weight     = 20
+  [[menu.main]]
+    identifier = "tags"
+    name       = "Tags"
+    url        = "/tags/"
+    weight     = 30
+  [[menu.main]]
+    identifier = "about"
+    name       = "About"
+    url        = "/about/"
+    weight     = 40
+  [[menu.main]]
+    identifier = "search"
+    name       = "Search"
+    url        = "/search/"
+    weight     = 50
