@@ -7,8 +7,8 @@ tags = ['ai', 'platform-engineering', 'devex', 'apm', 'claude-code', 'copilot']
 categories = ['platform-engineering']
 
 [cover]
-image = "/images/posts/distributing-ai-skills-with-apm/cover.png"
-alt = "Platform Engineering ships AI skills to every developer's laptop via APM"
+image = "/images/posts/distributing-ai-skills-with-apm/apm_skill_distribution_cover.svg"
+alt = "Editorial cover — one source repo syncs through APM out to Claude Code, Copilot, and many developer machines"
 +++
 
 Without skills, every developer feeds the agent a raw prompt and prays. Either it nails the team's conventions or invents some StackOverflow-grade thing you now have to refactor by hand. So you write skills — and then the real problem starts: getting them onto every developer's laptop, keeping them fresh, and not turning the agent into a token furnace.
