@@ -15,9 +15,10 @@ enableEmoji     = true
 
 [params]
   author      = "Artem Volkov"
-  description = "Personal blog of Artem Volkov"
-  keywords    = "blog, devops, cloud, sre, terraform, aws"
-  info        = ["DevOps / Cloud Engineer"]
+  description = "Personal blog of Artem Volkov — Platform Engineering, Cloud, AI"
+  keywords    = "blog, platform engineering, cloud, ai, devops, sre, terraform, aws"
+  info        = ["Platform Engineering | Cloud | AI"]
+  colorScheme = "dark"
   avatarURL  = "/images/avatar.svg"
   faviconSVG = "/favicon.svg"
   favicon_32 = "/favicon-32.png"
