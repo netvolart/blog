@@ -52,7 +52,7 @@ buildExpired    = false
     Content = """
 Platform Engineering • Cloud • AI
 
-I write about building and running modern infrastructure — Kubernetes, AWS, Terraform, automation, and the AI tooling reshaping the way we ship software.
+I write about building and running modern platforms infrastructure — AWS, Terraform, automation, backend and the AI tooling reshaping the way we ship software.
 """
 
   [[params.socialIcons]]
