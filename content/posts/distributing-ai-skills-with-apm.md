@@ -11,11 +11,7 @@ image = "/images/posts/distributing-ai-skills-with-apm/cover.png"
 alt = "Platform Engineering ships AI skills to every developer's laptop via APM"
 +++
 
-Without skills, every developer feeds the agent a raw prompt and prays. Sometimes it nails the team's conventions. Sometimes it invents some creative solution from StackOverflow that you now have to refactor by hand. The output quality variance is huge, and the only lever a developer has is "write a better prompt".
-
-So the question for a platform team is not whether to write skills. It is: how do you ship them to every developer's laptop, keep them updated, and make it work across Claude Code AND GitHub Copilot, on macOS AND Windows?
-
-This post is the short version of what worked.
+Without skills, every developer feeds the agent a raw prompt and prays. Either it nails the team's conventions or invents some StackOverflow-grade thing you now have to refactor by hand. So you write skills — and then the real problem starts: getting them onto every developer's laptop, keeping them fresh, and not turning the agent into a token furnace.
 
 ![Where skills fit on the AI SDLC map](/images/posts/distributing-ai-skills-with-apm/skills-on-sdlc-map.png)
 
@@ -35,19 +31,9 @@ From the Platform Team perspective, we can produce and distribute a third layer:
 - **Role expertise skills.** If someone on the Platform Team is an expert in infrastructure, they package that expertise as a skill. Product teams then do infra work without pulling the expert into the loop.
 
 
-A skill is just a folder:
+A skill is just a folder with a `SKILL.md` and some optional reference files. The agent loads only the `description` field at startup, and reads the rest of the skill when your prompt matches that description.
 
-```
-your-skill-name/
-├── SKILL.md          # Required - description + instructions
-├── scripts/          # Optional - executable code
-├── references/       # Optional - static docs the agent reads on demand
-└── assets/           # Optional - templates, etc.
-```
-
-The key mechanic here is **progressive disclosure**. Only the `description` field from `SKILL.md` is loaded into context at startup. The agent reads the full `SKILL.md` only when your prompt matches the description, and reads the `references/` files only when it actually needs them. You can ship a lot of context without burning a lot of tokens.
-
-That also means the **description is the most important field you'll write**. It is the entire basis for discovery. Mine include the exact phrases developers actually type when they want this skill to fire — not paraphrases, the real prompts from real users.
+So the **description is the entire API**. It is what the agent matches against to decide whether to fire your skill. Write it with the exact phrases developers actually type — not paraphrases, the real prompts from real users.
 
 ## The distribution problem
 
@@ -76,57 +62,11 @@ APM normalizes everything to two delivery shapes:
 
 For a platform team, packages are the "team kit" pattern — a coherent bundle of conventions you ship together. Single-primitive imports are for one-offs that do not belong to any specific kit.
 
-### What an APM package looks like
+You host packages on any git host APM can reach — GitHub, GitLab, Bitbucket, self-hosted. We host on GitLab.
 
-An APM package is a git repository with an `apm.yml` at the root and a `.apm/` directory holding the primitives:
+One detail that matters more than the rest: **skills and their MCP servers travel together**. A "create Jira ticket" skill without the Atlassian MCP server is just a doc. A package can declare its MCP dependencies right next to its APM dependencies, and when a developer installs the package, APM walks the whole tree — including transitive packages — and collects every MCP server declared anywhere in it. The developer runs one command; the agent ends up with both the skill and the tools it needs to do something with it.
 
-```
-backend-template/
-├── apm.yml                  # Package manifest
-├── README.md
-└── .apm/
-    ├── instructions/        # Coding standards (.instructions.md)
-    ├── prompts/             # Slash commands (.prompt.md)
-    ├── skills/              # Agent skills (SKILL.md folders)
-    ├── agents/              # Personas (.agent.md)
-    └── hooks/               # Event handlers (.json)
-```
-
-The `apm.yml` itself is minimal — a name, a version, and optionally its own dependencies and MCP servers:
-
-```yaml
-name: backend-template
-version: 1.0.0
-description: Standard skills for backend services
-dependencies:
-  apm: []
-  mcp: []
-```
-
-You host the package on any git host APM can reach — GitHub, GitLab, Bitbucket, self-hosted. We host on GitLab.
-
-### Skills and their MCP servers travel together
-
-Here is a detail that matters a lot in practice: skills often need MCP servers to be useful. A "create Jira ticket" skill without the Atlassian MCP server is just a doc. A "check pipeline status" skill without the GitLab MCP server is nothing at all.
-
-APM handles this. A package can declare its MCP dependencies right next to its APM dependencies:
-
-```yaml
-name: backend-template
-version: 1.0.0
-dependencies:
-  apm: []
-  mcp:
-    - name: atlassian
-      registry: false
-      transport: http
-      url: https://mcp.atlassian.com/v1/mcp
-    - io.github.github/github-mcp-server
-```
-
-When a developer installs the package, APM walks the whole tree — including transitive packages — and collects every MCP server declared anywhere in it. The developer's agent gets both the skill AND the tools it needs to actually do something with that skill, from a single `apm install`.
-
-For a platform team this is the piece that lets you ship skills as real, self-contained units. Not "here is a skill, please also go configure three MCP servers by hand first".
+The exact `apm.yml` schema, available targets, and CLI flags live in the [APM repo](https://github.com/microsoft/apm). I'm skipping them here because that's the part that will change between releases — the rest of this post is about how to wrap APM into something a platform team can actually run.
 
 ## The setup: user-level global skills
 
@@ -202,6 +142,21 @@ A quick tour of the actual skill categories we ended up with. This is the part w
 
 The pattern: each skill captures something a platform team would otherwise be writing into a wiki page that nobody reads.
 
+## The part nobody warned me about: bloat
+
+Here is the thing that surprised me once we had ~25 skills deployed.
+
+A developer asks the agent to rename a variable. Three skills match the description loosely — one for "refactor", one for "code change", one for "cleanup". The agent loads the full `SKILL.md` of each, decides this is a multi-step change, opens a plan, fetches a reference file, checks a convention. Eight thousand tokens of thinking later, the agent renames the variable. A one-line change cost a full planning pass.
+
+The cause is not APM. The cause is the `description` field. When team A writes "Triggers: refactor, rename, cleanup" because they want their skill to fire on refactors, they have also volunteered the skill for every variable rename in the codebase. Distribution does not filter for relevance — it just makes sure the loosely-matching skill is on everyone's laptop, ready to fire.
+
+Two things help, partially:
+
+- **Narrow descriptions.** A skill that fires on `add ALB listener rule` should not also fire on `change ECS task`. Spell out the specific surface, not the category. The temptation to write "covers all infra changes" is exactly what kills the agent's tokens.
+- **Evals next to the skill.** Each `SKILL.md` can have an `evals/evals.json` with prompts that SHOULD trigger and — more importantly — prompts that SHOULD NOT. CI runs them. The wrong-trigger half is the work that quietly does not happen, because writing negative cases is harder than writing happy paths.
+
+That is not a solution. That is two practices that move the curve a little. I do not have a clean answer for this yet — and I think it is worth being honest about. The next problem worth solving in this space is not how to ship more skills. It is how to keep the catalogue worth installing.
+
 ## Onboarding: one prompt
 
 The bootstrap still has to happen somewhere — install APM, write the manifest, add MCP servers, set up the hook. But you do not have to teach it. You ship a setup prompt that the developer pastes into Claude Code on a fresh machine, and the agent does it all:
@@ -212,16 +167,14 @@ The real prompt sets a `TARGET_AGENT` and a `TARGET_OS` variable at the top, the
 
 ## What I would watch out for
 
-A few things worth knowing before you copy this pattern.
-
-- **Target detection needs the directory to exist.** `apm install` only deploys to `~/.claude/` or `~/.copilot/` if those directories are already there. Run the agent once before the first `apm install`, or create the directories manually in the setup prompt.
+- **Skill descriptions are your API.** If discovery breaks, the skill might as well not exist. Test with the real phrases developers actually use, not the ones you wish they used. (And as the previous section argues — test the negative prompts too.)
 - **Lock down the MCP permissions.** When you add the Atlassian or GitLab MCP servers, the default tool surface is wide. Explicitly deny the write-side tools in `settings.json` (`createConfluencePage`, `editJiraIssue`, etc.) unless you really want the agent editing tickets on its own.
-- **Skill descriptions are your API.** If discovery breaks, the skill might as well not exist. Test with the real phrases developers actually use, not the ones you wish they used.
+- One minor gotcha: `apm install` only deploys to `~/.claude/` or `~/.copilot/` if those directories already exist. Run the agent once first, or create them in the setup prompt.
 
 ## The shift
 
-The thing that surprised me most building this: it is not really about APM. APM is fine, it works, whatever. The real shift is treating AI skills as a **platform product**.
+The thing that surprised me most building this: it is not really about APM. APM is fine, it works, whatever. The real shift is treating AI skills as a **platform product** — which also means having to garden the catalogue, not just ship it.
 
-Competence center writes them once. Distribution, versioning, and updates are automated. Developers do not copy files or follow READMEs. They open their agent and it knows how the company builds things.
+Competence center writes the skills once. Distribution, versioning, and updates are automated. Developers do not copy files or follow READMEs. They open their agent and it knows how the company builds things.
 
 That is the same operating model we have had for code dependencies for twenty years. It was only a matter of time before agent context got it too.
