@@ -60,7 +60,7 @@ I write about building and running modern infrastructure — Kubernetes, AWS, Te
     url  = "https://github.com/netvolart/"
   [[params.socialIcons]]
     name = "linkedin"
-    url  = "https://www.linkedin.com/in/artem-volkov/"
+    url  = "https://www.linkedin.com/in/volk0vartem/"
   [[params.socialIcons]]
     name = "rss"
     url  = "/index.xml"
